@@ -37,6 +37,10 @@ trait Utils
      */
     public static function validateJson(string $json): bool
     {
+        if ($json === '') {
+            return false;
+        }
+
         $validStartChars = ['{', '[', '"', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'f', 'n'];
         $json = trim($json);
         return in_array($json[0], $validStartChars);
