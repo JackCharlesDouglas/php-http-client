@@ -48,16 +48,12 @@ class Request
         }
         $this->_method = $method;
 
-        if (!$this->isAssocArray($headers)) {
-            throw new Exception('Request: Request headers must be an associative array');
-        }
-        $this->_headers = $headers;
-        
         if (!$this->isAssocArray($body)) {
             throw new Exception('Request: Request body must be an associative array');
         }
         $this->_body = $body;
         
+        $this->_headers = $headers;
         $this->_url = $url;
     }
 

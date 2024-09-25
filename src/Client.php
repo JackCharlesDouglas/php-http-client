@@ -21,8 +21,8 @@ use Http\Client\Request;
 class Client
 {
     private const DEFAULT_USER_AGENT = 'jackcharlesdouglas/php-http-client';
-    private const DEFAULT_ACCEPT = 'Accept:application/json';
-    private const DEFAULT_CONNECTION = 'Connection:Close';
+    private const DEFAULT_ACCEPT = 'Accept: application/json';
+    private const DEFAULT_CONNECTION = 'Connection: Close';
 
     /**
      * Initializes a new instance of the Client class.
