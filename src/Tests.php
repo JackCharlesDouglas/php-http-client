@@ -8,7 +8,14 @@ require __DIR__ . '\Client.php';
 use Http\Client\Client;
 use Http\Client\Request;
 
-$request = new Request('GET', 'https://api.agify.io/?name=meelad', [], []);
-
 $client = new Client();
-$client->sendRequest($request);
+
+$request = new Request(Request::METHOD_GET, 'https://official-joke-api.appspot.com/random_joke', [], []);
+$response = $client->sendRequest($request);
+print_r($response->getBody());
+echo PHP_EOL;
+
+$request = new Request(Request::METHOD_POST, 'https://httpbin.org/post', [], ['I' => 'am', 'a' => 'developer']);
+$response = $client->sendRequest($request);
+print_r($response->getBody());
+echo PHP_EOL;
