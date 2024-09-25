@@ -7,6 +7,18 @@ require __DIR__ . '\Utils.php';
 use Exception;
 use Http\Client\Utils;
 
+/**
+ * Represents an HTTP request.
+ * 
+ * @package Http\Client
+ * 
+ * @author Jack Douglas
+ * 
+ * @var 'GET' |'POST' |'OPTIONS' $method  The request method
+ * @var string                   $url     The request URL
+ * @var array                    $headers The request headers
+ * @var array                    $body    The request body
+ */
 class Request
 {
     use Utils;
@@ -52,7 +64,7 @@ class Request
     /**
      * Gets the request method as a string
      *
-     * @return string The request method (e.g. GET, POST, PUT, DELETE, etc.)
+     * @return string The request method GET, POST, OPTIONS
      */
     public function getMethod(): string
     {

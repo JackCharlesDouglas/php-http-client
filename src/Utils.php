@@ -2,6 +2,13 @@
 
 namespace Http\Client;
 
+/**
+ * Utility functions
+ * 
+ * @package Http\Client
+ * 
+ * @author Jack Douglas
+ */
 trait Utils
 {
     /**

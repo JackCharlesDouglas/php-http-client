@@ -5,6 +5,16 @@ namespace Http\Client;
 use Exception;
 use LogicException;
 
+/**
+ * Represents an HTTP response.
+ * 
+ * @package Http\Client
+ * 
+ * @author Jack Douglas
+ * 
+ * @var array $_headers The response headers
+ * @var array $_body    The response body
+ */
 class Response
 {
     private array $_headers;
