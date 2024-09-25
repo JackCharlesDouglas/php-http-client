@@ -7,6 +7,17 @@ require __DIR__ . '\Response.php';
 use Exception;
 use Http\Client\Request;
 
+/**
+ * Represents an HTTP client.
+ * 
+ * @package Http\Client
+ * 
+ * @author Jack Douglas
+ * 
+ * @var string DEFAULT_USER_AGENT The default user agent
+ * @var string DEFAULT_ACCEPT    The default Accept header
+ * @var string DEFAULT_CONNECTION The default Connection header
+ */
 class Client
 {
     private const DEFAULT_USER_AGENT = 'jackcharlesdouglas/php-http-client';
@@ -30,7 +41,7 @@ class Client
      *
      * @throws Exception If the request cannot be sent for any reason
      */
-    private function handleRequest(Request $request, $context): array
+    private function _handleRequest(Request $request, $context): array
     {
         $body = file_get_contents($request->getUrl(), false, $context);
 
@@ -42,28 +53,6 @@ class Client
         return [$http_response_header, $body];
     }
 
-    private function handleOptionsRequest(Request &$request): void
-    {
-        $context = stream_context_create(
-            [
-                'http' => [
-                    'method' => 'OPTIONS',
-                    'user_agent' => self::DEFAULT_USER_AGENT,
-                    'header' => [self::DEFAULT_ACCEPT, self::DEFAULT_CONNECTION],
-                ]
-            ]
-        );
-
-        try {
-            [$headers, $body] = $this->handleRequest($request, $context);   
-            Response::buildResponseFromRequest($headers, '[]'); 
-        } catch (Exception $e) {
-            // Most probable is that the target server doesn't accept OPTIONS requests.
-            // Log the error and continue
-            error_log('handleOptionsRequest: ' . $e->getMessage());
-        }
-    }
-
     /**
      * Creates a stream context option array from the given request.
      *
@@ -73,7 +62,7 @@ class Client
      *
      * @throws Exception If the request body is not a valid JSON
      */
-    private function createContext(Request $request)
+    private function _createContext(Request $request)
     {
         $method = $request->getMethod();
         $headers = $request->getHeaders();
@@ -109,9 +98,8 @@ class Client
      */
     public function sendRequest(Request $request): Response
     {
-        $this->handleOptionsRequest($request);
-        $context = $this->createContext($request);
-        [$headers, $body] = $this->handleRequest($request, $context);
+        $context = $this->_createContext($request);
+        [$headers, $body] = $this->_handleRequest($request, $context);
         return Response::buildResponseFromRequest($headers, $body);
     }
 }
