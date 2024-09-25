@@ -4,6 +4,7 @@ namespace Http\Client;
 
 use Exception;
 use LogicException;
+use Http\Client\Utils;
 
 /**
  * Represents an HTTP response.
@@ -17,8 +18,10 @@ use LogicException;
  */
 class Response
 {
+    use Utils;
+
     private array $_headers;
-    private array $_body;
+    private array | string | int $_body;
 
     /**
      * Initializes a new instance of the Response class.
@@ -45,7 +48,7 @@ class Response
      *
      * @return array
      */
-    public function getBody(): array
+    public function getBody(): array | string | int
     {
         return $this->_body;
     }
@@ -66,8 +69,9 @@ class Response
     {
         $response = new Response();
         
+        // Build headers
         try {
-            // Deal with the code eg. HTTP/1.1 200 OK
+            // Deal with the http code eg. HTTP/1.1 200 OK
             $responseHeader = array_shift($headers);
             $response->_headers[0] = $responseHeader;
 
@@ -79,14 +83,17 @@ class Response
             throw new LogicException('buildResponseFromRequest: Current logic cannot process headers');
         }
         
-        try {
+        // build body
+        $isValid = $response->validateJson($body);
+        if ($isValid) {
             $decodedBody = json_decode($body, true);
             if ($decodedBody === null) {
-                throw new Exception('Invalid JSON body');
+                throw new Exception('buildResponseFromRequest: Invalid JSON body');
             }
             $response->_body = $decodedBody; 
-        } catch (Exception $e) {
-            throw new Exception('buildResponseFromRequest: ' . $e->getMessage());
+        } else {
+            // It's a string or number that isn't encoded as JSON
+            $response->_body = $body;
         }
 
         return $response;
