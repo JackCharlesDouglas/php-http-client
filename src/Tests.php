@@ -19,3 +19,5 @@ $request = new Request(Request::METHOD_POST, 'https://httpbin.org/post', [], ['I
 $response = $client->sendRequest($request);
 print_r($response->getBody());
 echo PHP_EOL;
+
+// TODO: Add more tests
